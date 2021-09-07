@@ -1,55 +1,39 @@
+# Contains various utilities for working with sandpiles and toppling vectors.
 import numpy as np
 
-# An abelian sandpile instance on a rectangular grid.
-class Sandpile:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.grid = np.zeros((width, height), dtype=int) 
-        self.topplegrid = np.zeros((width, height), dtype=int)
+# Topples a toppling vector into its corresponding sandpile.
+def topple(self, v):
+    v = np.pad(v, ((1, 1), (1, 1)))
+    l = np.roll(v, -1,  axis=1)
+    r = np.roll(v, 1, axis=1)
+    u = np.roll(v, -1, axis=0)
+    d = np.roll(v, 1, axis=0)
 
-    # Returns the identity element of the critical group.
-    def identity(width, height):
-        fst = Sandpile(width, height)
-        fst.vadd(fst.const(8))
-        fst.stabilise()
+    return (l + r + u + d - v*4)[1:-1, 1:-1]
 
-        res = Sandpile(width, height)
-        res.vadd(res.const(8))
-        res.vadd(-fst.grid)
-        res.stabilise()
+# True if the given sandpile is stable.
+def isStable(u):
+    return np.min(u) >= 0 and np.max(u) < 4
 
-        return res
+# Topples the given sandpile until it's stable. Note that this can't handle 
+# the case of negative sandpiles yet.
+def stabilise(u):
+    v = zero(u.shape[0], u.shape[1]) # toppling vector
+    while not isStable(u):
+        v += u // 4
+        u += topple(u // 4)
+    return u, v
 
-    # Returns a constant sand vector.
-    def const(self, n):
-        return np.ones((self.width, self.height), dtype=int) * n
+# Returns the zero grid.
+def zero(width, height):
+    return np.zeros((width, height), dtype=int)
 
-    # Adds the given amount of sand to the given vertex.
-    def add(self, x, y, amount):
-        self.grid[1+x, 1+y] += amount
+# Returns the uniformly one grid.
+def one(width, height):
+    return np.ones((width, height), dtype=int)
 
-    # Adds the given vector to the sand grid.
-    def vadd(self, v):
-        self.grid += v
-
-    # Returns a sand delta for the given toppling vector.
-    def vtopple(self, v):
-        v = np.pad(v, ((1, 1), (1, 1)))
-        l = np.roll(v, -1,  axis=1)
-        r = np.roll(v, 1, axis=1)
-        u = np.roll(v, -1, axis=0)
-        d = np.roll(v, 1, axis=0)
-
-        return (l + r + u + d - v*4)[1:-1, 1:-1]
-
-    def stable(self):
-        return np.min(self.grid) >= 0 and np.max(self.grid) < 4
-
-    def stabilise(self):
-        cnt = 0.0
-        while not self.stable():
-            cnt += 1.0
-            self.topplegrid += self.grid // 4
-            self.grid += self.vtopple(self.grid // 4)
-        return cnt
+# Returns the identity element of the recurrence group.
+def identity(width, height):
+    fst, _ = stabilise(one(width, height) * 8)
+    res, _ = stabilise(one(width, height) * 8 - fst)
+    return res
