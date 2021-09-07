@@ -2,7 +2,7 @@
 import numpy as np
 
 # Topples a toppling vector into its corresponding sandpile.
-def topple(self, v):
+def topple(v):
     v = np.pad(v, ((1, 1), (1, 1)))
     l = np.roll(v, -1,  axis=1)
     r = np.roll(v, 1, axis=1)
