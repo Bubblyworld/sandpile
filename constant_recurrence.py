@@ -10,7 +10,7 @@ import src.analytic as a
 import src.numeric as n
 
 K = 4 # the initial condition
-L = 50 # domain length
+L = 100 # domain length
 C = ['red', 'green', 'blue', 'purple'] # image colours
 
 u, v = s.stabilise(s.one(L, L) * K)

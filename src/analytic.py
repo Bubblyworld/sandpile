@@ -37,3 +37,9 @@ def _topple(x, y, t, n, m, K, L):
     tconst = -1.0 * L**2 / (n*n + m*m) / np.pi**2
     tval = np.exp(-(n*n + m*m) * np.pi**2 / L**2 / 4 * t)
     return const * tconst * tval * np.sin(n * np.pi * x / L) * np.sin(m * np.pi * y / L)
+
+# Estimates the stability time for an analytic solution (i.e. when max(u) is
+# less than 3) using only the 1,1 mode. We could use other vibration modes too
+# for more accuracy, but I think we would have to do it numerically.
+def stable_time(K, L):
+    return -2*L*L / np.pi**2 * np.log(3*np.pi**2 / 16 / K)
