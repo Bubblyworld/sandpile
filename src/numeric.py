@@ -27,3 +27,14 @@ def heat(u, v, dl, dt):
     v_prime = v + dt * u/4
     return u_prime, v_prime
 
+# Estimates stability time for given conditions.
+def stable_time(K, L, P):
+    u = np.ones((L+1, L+1), dtype=float) * K
+    v = np.zeros((L+1, L+1), dtype=float)
+
+    t = 0
+    while np.max(u) > P:
+        t += 1.0
+        u, v = heat(u, v, 1.0, 1.0)
+
+    return t

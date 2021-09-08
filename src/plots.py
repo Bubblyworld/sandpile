@@ -3,6 +3,11 @@
 import matplotlib.pyplot as plt
 from PIL import Image, ImageColor
 
+# Plots a single 2d graph.
+def plot2d(x, y):
+    plt.plot(x, y)
+    plt.show()
+
 # Plots a single graph, where x, y are meshgrids and u is the graph values.
 def plot(x, y, u):
     plots(x, y, [[u]])

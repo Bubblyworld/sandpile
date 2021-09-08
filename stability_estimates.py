@@ -12,24 +12,5 @@ K = 4.0 # initial condition
 
 for N in NL:
     print("Case N=" + str(N) + ":")
-
-    ### Numeric estimate
-    x, y = np.meshgrid(
-        np.linspace(0, N, N+1, dtype=float),
-        np.linspace(0, N, N+1, dtype=float)
-    )
-    
-    t_num = 0
-    u = np.ones((N+1, N+1), dtype=float) * K
-    v = np.zeros((N+1, N+1), dtype=float)
-    while np.max(u) > 3.0:
-        t_num += 1.0
-        u, v = n.heat(u, v, 1.0, 1.0)
-    ###
-
-    ### Analytic estimate
-    t_ana = a.stable_time(K, N)
-    ###
-    
-    print("  numerical stability time: " + str(t_num))
-    print("  analytic estimate: " + str(t_ana))
+    print("  numerical: " + str(n.stable_time(K, N)))
+    print("  analytical: " + str(a.stable_time(K, N)))
