@@ -9,8 +9,9 @@ import src.numeric as n
 
 NL = [i*20 for i in range(1, 10)] # grid sizes
 K = 4.0 # initial condition
+P = 3.5 # continous stability threshold
 
 for N in NL:
     print("Case N=" + str(N) + ":")
-    print("  numerical: " + str(n.stable_time(K, N)))
-    print("  analytical: " + str(a.stable_time(K, N)))
+    print("  numerical: " + str(n.stable_time(K, N, P)))
+    print("  analytical: " + str(a.stable_time(K, N, P)))

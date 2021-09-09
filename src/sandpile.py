@@ -15,9 +15,9 @@ def topple(v):
 def isStable(u):
     return np.min(u) >= 0 and np.max(u) < 4
 
-# Topples the given sandpile until it's stable. Note that this can't handle 
-# the case of negative sandpiles yet.
-def stabilise(u):
+# Topples the given sandpile until it's stable.
+def stabilise(_u):
+    u = np.copy(_u)
     v = zero(u.shape[0], u.shape[1]) # toppling vector
     while not isStable(u):
         v += u // 4

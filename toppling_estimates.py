@@ -8,7 +8,7 @@ import src.analytic as a
 import src.numeric as n
 
 K = 4 # the initial condition
-L = 80 # domain length
+L = 200 # domain length
 
 # Get actual toppling vector.
 _, v = s.stabilise(s.one(L, L) * K)
@@ -17,11 +17,12 @@ x, y = np.meshgrid(
     np.linspace(0, L, L, dtype=float)
 )
 
-# Compute analytic estimates of the toppling vector.
+# Compute analytic estimates of the toppling vector for various continous
+# threshold (curiously, it seems to differ between discrete/continous cases).
 avgs = []
 bs = np.linspace(2.5, 4.0, 20, dtype=float)
 for b in bs:
-    t = n.stable_time(K, L, b) # 3.5 seems to be the magic number?
+    t = a.stable_time(K, L, b)
     av = a.topple(x, y, t, 15, 15, K, L)
     avgs.append(np.sum(np.abs(v-av)) / L / L)
 

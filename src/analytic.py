@@ -3,13 +3,14 @@
 # estimate toppling vectors for constant-height sandpiles, which I'm hoping
 # will speed up their toppling time massively.
 import numpy as np
+import scipy.optimize as so
 
 # Computes analytic solution to the heat equation on an LxL grid, with fixed-0
 # boundary conditions and an initial uniform state of u_0 = K. The solution's
 # x, y vibrational modes are bounded by M, N respectively:
 #     4u_t = u_xx + u_yy
 def heat(x, y, t, N, M, K, L):
-    res = np.zeros(x.shape, dtype=float)
+    res = 0
     for n in range(1, N+1):
         for m in range(1, M+1):
             res += _heat(x, y, t, n, m, K, L)
@@ -41,5 +42,6 @@ def _topple(x, y, t, n, m, K, L):
 # Estimates the stability time for an analytic solution (i.e. when max(u) is
 # less than 3) using only the 1,1 mode. We could use other vibration modes too
 # for more accuracy, but I think we would have to do it numerically.
-def stable_time(K, L):
-    return -2*L*L / np.pi**2 * np.log(3*np.pi**2 / 16 / K)
+def stable_time(K, L, P):
+    fn = lambda x: heat(L/2, L/2, x, 10, 10, K, L) - P
+    return so.broyden1(fn, 3.5)
