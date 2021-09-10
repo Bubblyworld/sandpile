@@ -10,13 +10,8 @@ import src.analytic as a
 import src.numeric as n
 
 K = 4 # the initial condition
-L = 100 # domain length
+L = 50 # domain length
 C = ['red', 'green', 'blue', 'purple'] # image colours
 
 u, v = s.stabilise(s.one(L, L) * K)
-x, y = np.meshgrid(
-    np.linspace(0, L, L, dtype=float),
-    np.linspace(0, L, L, dtype=float)
-)
-
 p.image(u, C).show()

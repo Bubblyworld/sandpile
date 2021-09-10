@@ -15,13 +15,27 @@ def topple(v):
 def isStable(u):
     return np.min(u) >= 0 and np.max(u) < 4
 
+# True is the given sandpile is legal, i.e. every weight is positive.
+def isLegal(u):
+    return np.min(u) >= 0
+
 # Topples the given sandpile until it's stable.
 def stabilise(_u):
     u = np.copy(_u)
     v = zero(u.shape[0], u.shape[1]) # toppling vector
+
+    # First we make u legal by removing any negative weights:
+    while not isLegal(u):
+        dv = np.clip(u // 4, None, 0)
+        v += dv
+        u += topple(dv)
+
+    # Then we make u stable by collapsing large vertices:
     while not isStable(u):
-        v += u // 4
-        u += topple(u // 4)
+        dv = u // 4
+        v += dv
+        u += topple(dv)
+
     return u, v
 
 # Returns the zero grid.

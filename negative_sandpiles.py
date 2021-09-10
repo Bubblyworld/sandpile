@@ -18,7 +18,7 @@ def run(u, label):
     print("toppling vector:")
     print(vs)
     print("sanity check sandpile:")
-    print(u + s.topple(vs))
+    print(us == (u + s.topple(vs)))
     print("---")
 
 # Trivial 2x2 case.
